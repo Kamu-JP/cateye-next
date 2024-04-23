@@ -27,3 +27,35 @@ python3 /path/to/cateye.py
 ### Follow the instructions
 
 ### Done
+
+## for Developers
+
+### How to create software that can be installed with Cateye-next?
+
+1. Create JSON File to Server (Static is also Okay)
+2. Edit JSON (like Example)
+
+**Example**
+```
+{
+    "name": "software name",
+    "url": "https://example.com/path/to/file.tar.gz",
+    "folder": "Install folder (example: /usr/local/bin )",
+    "version": "major version of cateye-next (example: 10)",
+    "files": [
+
+        "filename.ex"
+    
+    ],
+    "dependencies": [
+
+        "https://example.com/path/to/other-package.json"
+  
+    ],
+    "script": [
+
+        "Write the necessary Python processing here."
+      
+    ]
+  }
+```
