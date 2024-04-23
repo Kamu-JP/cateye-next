@@ -33,9 +33,9 @@ python3 /path/to/cateye.py
 ### How to create software that can be installed with Cateye-next?
 
 1. Create JSON File to Server (Static is also Okay)
-2. Edit JSON (like Example)
+2. Edit JSON (like Example01)
 
-**Example**
+**Example01**
 ```
 {
     "name": "software name",
