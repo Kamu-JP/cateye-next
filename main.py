@@ -198,6 +198,7 @@ def Package_Install(url):
     download_file(pkgfile,"cateye-installing.tar.gz")
     create_directory(pkgfolder)
     extract_tar_gz("cateye-installing.tar.gz", pkgfolder)
+    os.remove("install_info.json")
     os.remove("cateye-installing.tar.gz")
 
     if len(scripts) > 0:
