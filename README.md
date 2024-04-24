@@ -5,6 +5,9 @@ Cateye NEXT: NEXT Generation Installer
 
 **Python (Version 9 to 12)**
 
+## Package list
+https://kamu.jp/cateye/web/
+
 ## How to use
 
 ### Download cateye-next
