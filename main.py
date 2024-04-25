@@ -3,29 +3,29 @@ import tarfile
 import os
 import shutil
 from pathlib import Path
+import subprocess
+import pip
+import sys
 
-version = "10.0.0"
+version = "10.1.0"
 
 try:
-
     import requests
     from rich.progress import Progress
     from rich.console import Console
     from rich.theme import Theme
     from rich.prompt import Prompt
-
-except ModuleNotFoundError as e:
-
-    import subprocess
-    import sys
-
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "rich"])
-
-    import requests
-    from rich.progress import Progress
-    from rich.console import Console
-    from rich.theme import Theme
-    from rich.prompt import Prompt
+except ImportError as e:
+    missing_package = str(e).split(" ")[-1].strip("'")
+    print(f"Error: Missing package '{missing_package}'.")
+    print("This script requires the 'requests' and 'rich' packages.")
+    print("Please set up a virtual environment and install the required packages:")
+    print("""
+    python3 -m venv path/to/venv
+    source path/to/venv/bin/activate
+    python3 -m pip install requests rich
+    """)
+    sys.exit(1)
 
 home_directory = os.path.expanduser('~')
 
@@ -38,50 +38,48 @@ custom_theme = Theme({
 
 console = Console(theme=custom_theme)
 
-def start(lang):
+def start():
 
-    if lang == "EN":
-        print("I have set the language setting of Cateye NEXT to English.")
-        print("")
+    print("Please select action")
+    print("( install: Install Package from Official API | exit: Quit Cateye-next )")
+    action = Prompt.ask("action", choices=["install", "exit"])
+    print("")
 
-        print("Please select action")
-        print("( install: Install Package from Official API | exit: Quit Cateye-next )")
-        action = Prompt.ask("action", choices=["install", "exit"])
-        print("")
+    if action == "install":
 
-        if action == "install":
+        package_source = input("Select a package source (pip/npm/cateye): ")
+        
+        if package_source == "pip" or package_source == "npm":
+            package_name = input("Enter the package name: ")
+            install_package(package_source, package_name)
 
+        if package_source == "cateye":
             print("Please enter Package URL")
             url = input("url> ")
             print("")
-
             Package_Install(url)
 
-        elif action == "exit":
+    elif action == "exit":
 
-            exit(0)
+        exit(0)
 
-    elif lang == "JP":
-        print("Cateye NEXTの言語設定を日本語に設定しました。")
-        print("注意: Cateye NEXTは基本英語です。日本語に翻訳されていない部分があります。")
-        print("")
-
-        print("アクションを選択してください")
-        print("( install: 公式APIからパッケージをインストールする | exit: 終了する )")
-        action = Prompt.ask("action", choices=["install", "exit"])
-        print("")
-
-        if action == "install":
-
-            print("Please enter Package URL")
-            url = input("url> ")
-            print("")
-
-            Package_Install(url)
-
-        elif action == "exit":
-
-            exit(0)
+def install_package(package_source, package_name):
+    if package_source == "pip":
+        try:
+            # Install Python package using pip
+            subprocess.check_call(["pip", "install", package_name])
+            print(f"Installed {package_name} successfully!")
+        except subprocess.CalledProcessError as e:
+            print(f"Error installing {package_name}: {e}")
+    elif package_source == "npm":
+        try:
+            # Install Node.js package using npm
+            subprocess.check_call(["npm", "install", package_name])
+            print(f"Installed {package_name} successfully!")
+        except subprocess.CalledProcessError as e:
+            print(f"Error installing {package_name}: {e}")
+    else:
+        pass
 
 def language_prompt():
     language = Prompt.ask("lang", choices=["EN", "JP"])
@@ -224,12 +222,7 @@ try:
     print(f"Cateye-next {version}")
     print("")
 
-    print("Please select language / 言語を選択してください")
-    print("( EN: English | JP: 日本語 )")
-    lang = language_prompt()
-    print("")
-
-    start(lang)
+    start()
 
 except:
 
